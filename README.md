@@ -3,11 +3,9 @@ SinglePHP-with-NameSpace 微框架
 
 上一版本地址：[https://github.com/nly/SinglePHP][1]
 
-namespace版地址：[https://github.com/nly/SinglePHP-with-NameSpace][2]
 
 
   [1]: https://github.com/nly/SinglePHP
-  [2]: https://github.com/nly/SinglePHP-with-NameSpace
 ---
 **说明：**
 
