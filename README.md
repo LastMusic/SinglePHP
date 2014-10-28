@@ -1,4 +1,4 @@
-SinglePHP-with-NameSpace 微框架
+SinglePHP
 ========================
 
 上一版本地址：[https://github.com/nly/SinglePHP][1]
