@@ -1,0 +1,20 @@
+<?php
+/**
+ * Created by PhpStorm
+ * @desc: 网站入口文件
+ * @package: index.php
+ * @author: leandre weibo.com/nly
+ * @copyright: copyright(2014) leandre.cn
+ * @version: 14/10/27
+ */
+header("Content-Type:text/html; charset=utf-8");
+//error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
+define('DS', DIRECTORY_SEPARATOR);
+require '../SinglePHP.class.php';
+$config = array(
+    'APP_PATH' => '../app/',
+    'USE_SESSION' => true, //开启SESSION会话
+    'SHOW_LOAD_TIME' => true, //显示执行耗时
+    'OUTPUT_ENCODE' => true, //压缩模板代码
+);
+Single\SinglePHP::getInstance($config)->run();

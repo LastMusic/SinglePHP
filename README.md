@@ -1,0 +1,120 @@
+SinglePHP-with-NameSpace 微框架
+========================
+
+上一版本地址：[https://github.com/nly/SinglePHP][1]
+
+namespace版地址：[https://github.com/nly/SinglePHP-with-NameSpace][2]
+
+
+  [1]: https://github.com/nly/SinglePHP
+  [2]: https://github.com/nly/SinglePHP-with-NameSpace
+---
+**说明：**
+
+ 1. 首先是vhost、rewrite配置 
+
+		<VirtualHost *>
+			DocumentRoot "your/path/to/htdocs"
+			ServerName single.dev.com
+			ServerAlias www.single.dev.com
+	    </VirtualHost>
+	    <IfModule mod_rewrite.c>
+	    	RewriteEngine on
+	    	RewriteCond %{REQUEST_FILENAME} !-d
+	    	RewriteCond %{REQUEST_FILENAME} !-f
+	    	RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+	    </IfModule>
+
+ 2. 目录结构
+ 
+		root
+		   |
+		   |---SinglePHP.class.php
+		   |---htdocs---|
+		                |--index.php
+		                |--.htaccess
+		                |--favicon.ico
+		   |---app---|
+		             |---config     配置文件夹
+		             |---controller 控制器文件夹
+		             |---do         数据对象
+		             |---dw         数据写入
+		             |---dr         数据读取
+		             |---lib        类库
+		             |---log        日志
+		             |---tpl        模板目录
+		             |---widget     widget
+		             |---tool       工具
+		             |---common.php 通用函数库
+
+3. 访问路径
+
+		f.e:
+		single.dev.com                      --->    app/controller/index.php ->  _run()
+		single.dev.com/index                --->    app/controller/index.php ->  _run()
+		single.dev.com/index?id=123         --->    app/controller/index.php ->  _run() 
+		single.dev.com/start                --->    app/controller/start.php ->  _run()
+		single.dev.com/doc                  --->    app/controller/doc.php   ->  _run()
+		single.dev.com/event/prize          --->    app/controller/event/prize.php ->  _run()
+		single.dev.com/event/mobile/index   --->    app/controller/event/mobile/index.php ->  _run()
+        
+4. 如何使用类？
+
+		一般来说，不需要显示的实例化。
+		f.e:
+		namespace Controller
+        {
+            class Index extends Base
+            {
+                public function _run()
+                {
+                    echo "hello world";
+                    echo testFunction();
+                    new \Dw\Event();
+                    \Dw\Event::add();
+                    $this->display();
+                    //$this->display('index');
+                }
+            }
+        }
+		
+		namespace Controller\Event
+        {
+            class Prize  extends \Controller\Base implements \Controller\Inter\Test
+            {
+                public function _run()
+                {
+                    $this->add();
+                    $this->del();
+                    $this->modify();
+                }
+
+                public function add()
+                {
+                    echo 'add';
+                }
+
+                public function del ()
+                {
+                    echo 'del';
+                }
+
+                public function modify()
+                {
+                    echo 'modify';
+                }
+            }
+        }
+        
+5.如何命名？
+
+		类名完全是和目录对应的
+		
+		f.e:
+			Controller\Index ----> 及就是 controller 下的 index.php
+			Controller\Base  ----> 是controller下的base.php
+			Controller\Interface\Interface  ---> 是controller下interface下的interface.php
+			Controller\Event\Mobile\index   ---> 是controller下event目录下mobile下的index.php
+			Dw_Event   -->  是 dw下的event.php
+		反正大概就是这样子的，目录名，文件名都是小写，namespace。
+
