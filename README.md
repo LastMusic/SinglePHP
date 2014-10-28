@@ -68,7 +68,8 @@ SinglePHP
 		single.dev.com/start                --->    app/controller/start.php ->  _run()
 		single.dev.com/doc                  --->    app/controller/doc.php   ->  _run()
 		single.dev.com/event/prize          --->    app/controller/event/prize.php ->  _run()
-		single.dev.com/event/mobile/index   --->    app/controller/event/mobile/index.php ->  _run()
+		single.dev.com/event/mobile/index   --->    app/controller/event/mobile/index.php
+		 ->  _run()
         
 4. 如何使用类？
 
@@ -132,7 +133,8 @@ SinglePHP
 
 6.注意事项：
 
-    模板中如果使用php代码，并且使用了模板压缩功能，那么"<?php"后面请输入一个空格，并且不能换行，并且必须带有"?>"的结尾.
+    模板中如果使用php代码，并且使用了模板压缩功能，那么"<?php"后面请输入一个空格，并且不能换行，
+    并且必须带有"?>"的结尾.
     f.e:
         <?php $data = array(
             'title' => 'Welcome',
