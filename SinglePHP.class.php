@@ -345,7 +345,7 @@ class View
         unset($data);
         extract(self::$tmpData['data']);
         $template = C('OUTPUT_ENCODE') ? str_replace(array("\n","\t","    "), '', file_get_contents(self::$tmpData['path'])) : file_get_contents(self::$tmpData['path']);
-        eval('?>' . file_get_contents(self::$tmpData['path']));
+        eval('?>' . $template);
     }
 
 }

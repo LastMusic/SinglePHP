@@ -9,19 +9,33 @@ SinglePHP-with-NameSpace 微框架
 ---
 **说明：**
 
- 1. 首先是vhost、rewrite配置 
+ 1. 首先是vhost、rewrite配置
+
+        Apache：
 
 		<VirtualHost *>
 			DocumentRoot "your/path/to/htdocs"
 			ServerName single.dev.com
 			ServerAlias www.single.dev.com
 	    </VirtualHost>
+
 	    <IfModule mod_rewrite.c>
 	    	RewriteEngine on
-	    	RewriteCond %{REQUEST_FILENAME} !-d
+	        RewriteCond %{REQUEST_FILENAME} !-d
 	    	RewriteCond %{REQUEST_FILENAME} !-f
 	    	RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
 	    </IfModule>
+
+	    Nginx：
+
+        location / {
+            if (!-e $request_filename) {
+                rewrite ^/(.*)$ /index.php last;
+                break;
+            }
+        }
+
+
 
  2. 目录结构
  
@@ -115,4 +129,15 @@ SinglePHP-with-NameSpace 微框架
 			Controller\Event\Mobile\index   ---> 是controller下event目录下mobile下的index.php
 			Dw_Event   -->  是 dw下的event.php
 		反正大概就是这样子的，目录名，文件名都是小写，namespace。
+
+6.注意事项：
+    模板中如果使用php代码，并且使用了模板压缩功能，那么"<?php"后面请输入一个空格，并且不能换行，并且必须带有"?>"的结尾.
+    f.e:
+        <?php $data = array(
+            'title' => 'Welcome',
+            'body_class' => 'bs-docs-home',
+        );
+        \Single\View::tplInclude('public/header', $data);
+        ?>
+
 
