@@ -166,7 +166,7 @@ class SinglePHP
             if (C('SHOW_LOAD_TIME')) {
                 echo sprintf('<br />耗时： %.4f ms', ($end - $begin) * 1000);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "<br /><br /><br /><font color='red'>程序异常信息：" . $e->getMessage() . '</font><br />';
             echo '出错文件：', $e->getFile(), '<br/>';
             echo '错误行数：', $e->getLine(), '<br/>';
