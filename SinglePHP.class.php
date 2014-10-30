@@ -482,9 +482,9 @@ class Log
 }
 
 /**
- * ExtException类，记录额外的异常信息
+ * SingleException，记录额外的异常信息
  */
-class ExtException extends \Exception
+class SingleException extends \Exception
 {
     /**
      * @var array
@@ -497,7 +497,7 @@ class ExtException extends \Exception
      * @param int $code
      * @param null $previous
      */
-    public function __construct($message = "", $extra = array(), $code = 0, $previous = null)
+    public function __construct($message = "", array $extra = array(), $code = 0, $previous = null)
     {
         $this->extra = $extra;
         parent::__construct($message, $code, $previous);
