@@ -1,22 +1,30 @@
 <?php
-namespace Controller
+namespace Controller;
+
+use DataObject\User;
+use Lib\Exception\Controller_Exception;
+
+class Doc extends Base
 {
-    class Doc extends Base
+    public function _run()
     {
-        public function _run()
-        {
-            try{
-                //throw new \Lib\Exception\Controller_Exception('test error', array(1,2,3));
-                throw new \Single\SingleException('program error ');
-                //exit;
-            } catch (\Lib\Exception\Controller_Exception $e) {
-                echo $e->getMessage();
-                print_r($e->getExtra());
-            } catch (\Single\SingleException $e) {
-                echo $e->getMessage();
-            }
-            //$this->display();
-            //$tihs->display('index');
+        try{
+            $userinfo = array(
+                'id'=> 1,
+                'name' => 'bob',
+                'sex' => '1',
+                'age' => '22'
+            );
+            $do = new User($userinfo);
+            var_dump($do);
+            $do->name = 'alice';
+            var_dump($do->to_array());
+            throw new Controller_Exception('controller test error');
+        } catch (Controller_Exception $e) {
+            echo $e->getMessage();
         }
+        //$this->display();
+        //$tihs->display('index');
     }
 }
+
