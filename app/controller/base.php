@@ -1,7 +1,9 @@
 <?php
-namespace Controller{
-    class Base extends \Single\Controller
-    {
-        protected function _init(){}
-    }
+namespace Controller;
+use Single\Controller;
+
+class Base extends Controller
+{
+    protected function _init(){}
 }
+

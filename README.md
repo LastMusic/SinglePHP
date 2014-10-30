@@ -49,7 +49,7 @@ SinglePHP
 		   |---app---|
 		             |---config     配置文件夹
 		             |---controller 控制器文件夹
-		             |---do         数据对象
+		             |---dataobject 数据对象
 		             |---dw         数据写入
 		             |---dr         数据读取
 		             |---lib        类库
