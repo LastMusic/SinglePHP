@@ -85,9 +85,9 @@ function shutdown()
         $errorInfo = error_get_last();
         if ($errorInfo !== null) {
             Log::fatal($errorInfo['message'] . ' in ' . $errorInfo['file'] . ' at ' . $errorInfo['line']);
-            echo "<br /><br /><font color='red'>程序异常信息：" . $errorInfo['message'] . '</font><br />';
-            echo '出错文件：', $errorInfo['line'], '<br/>';
-            echo '错误行数：', $errorInfo['file'], '<br/>';
+            echo "<br /><br /><font color='red'>Exception Message：" . $errorInfo['message'] . '</font><br />';
+            echo 'Exception File：', $errorInfo['line'], '<br/>';
+            echo 'Exception Line：', $errorInfo['file'], '<br/>';
         }
     }
 }
@@ -168,24 +168,24 @@ class SinglePHP
             $namespace = '\Controller\\' . $dirStr;
             $controllerClass = $namespace . $this->c;
             if (!class_exists($controllerClass)) {
-                halt('控制器' . $controllerClass . '不存在');
+                halt('Controller ' . $controllerClass . ' does not exist');
             }
             $controller = new $controllerClass();
             if (!method_exists($controller, '_run')) {
-                halt('控制器' . $controllerClass . '中方法_run()不存在');
+                halt('Controller ' . $controllerClass . ' does not has _run() method');
             }
             $begin = microtime(TRUE);
-            call_user_func(array($controller, '_run')); //程序入口
+            call_user_func(array($controller, '_run')); // main
             $end = microtime(TRUE);
             if (C('SHOW_LOAD_TIME')) {
-                echo sprintf('<br />耗时： %.4f ms', ($end - $begin) * 1000);
+                echo sprintf('<br />Time： %.4f ms', ($end - $begin) * 1000);
             }
         } catch (\Exception $e) {
             if (C('DEBUG_MODE')) {
-                echo "<br /><br /><br /><font color='red'>程序异常信息：" . $e->getMessage() . '</font><br />';
-                echo '出错文件：', $e->getFile(), '<br/>';
-                echo '错误行数：', $e->getLine(), '<br/>';
-                echo '<pre>出错代码：<br/>' . $e->getTraceAsString() . '</pre>';
+                echo "<br /><br /><br /><font color='red'>Exception Message：" . $e->getMessage() . '</font><br />';
+                echo 'Exception File：', $e->getFile(), '<br/>';
+                echo 'Exception Line：', $e->getLine(), '<br/>';
+                echo '<pre>Exception Code：<br/>' . $e->getTraceAsString() . '</pre>';
             }
             die;
         }
