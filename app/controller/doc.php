@@ -8,18 +8,18 @@ class Doc extends Base
 {
     public function _run()
     {
-        try{
+        try {
             $userinfo = array(
-                'id'=> 1,
+                'id' => 2,
                 'name' => 'bob',
                 'sex' => '1',
                 'age' => '22'
             );
             $do = new User($userinfo);
             var_dump($do);
-            $do->name = 'alice';
-            var_dump($do->to_array());
-            throw new Controller_Exception('controller test error');
+//            $do->name = 'alice';
+//            var_dump($do->to_array());
+//            throw new Controller_Exception('controller test error');
         } catch (Controller_Exception $e) {
             echo $e->getMessage();
         }

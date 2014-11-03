@@ -3,12 +3,13 @@
  * Created by PhpStorm
  * @desc: SinglePHP框架
  * @package: SinglePHP.class.php
- * @author: leandre weibo.com/nly
+ * @author: leandre <nly92@foxmail.com>
  * @copyright: copyright(2014) leandre.cn
  * @version: 14/10/27
  */
 
 namespace Single;
+register_shutdown_function('Single\shutdown');
 date_default_timezone_set('Asia/Shanghai');
 /**
  * 获取和设置配置参数 支持批量定义
@@ -76,6 +77,19 @@ function halt($str, $display = true)
         echo $str;
     }
     exit;
+}
+
+function shutdown()
+{
+    if (C('DEBUG_MODE')) {
+        $errorInfo = error_get_last();
+        if ($errorInfo !== null) {
+            Log::fatal($errorInfo['message'] . ' in ' . $errorInfo['file'] . ' at ' . $errorInfo['line']);
+            echo "<br /><br /><font color='red'>程序异常信息：" . $errorInfo['message'] . '</font><br />';
+            echo '出错文件：', $errorInfo['line'], '<br/>';
+            echo '错误行数：', $errorInfo['file'], '<br/>';
+        }
+    }
 }
 
 /**
@@ -167,10 +181,12 @@ class SinglePHP
                 echo sprintf('<br />耗时： %.4f ms', ($end - $begin) * 1000);
             }
         } catch (\Exception $e) {
-            echo "<br /><br /><br /><font color='red'>程序异常信息：" . $e->getMessage() . '</font><br />';
-            echo '出错文件：', $e->getFile(), '<br/>';
-            echo '错误行数：', $e->getLine(), '<br/>';
-            echo '<pre>出错代码：<br/>' . $e->getTraceAsString() . '</pre>';
+            if (C('DEBUG_MODE')) {
+                echo "<br /><br /><br /><font color='red'>程序异常信息：" . $e->getMessage() . '</font><br />';
+                echo '出错文件：', $e->getFile(), '<br/>';
+                echo '错误行数：', $e->getLine(), '<br/>';
+                echo '<pre>出错代码：<br/>' . $e->getTraceAsString() . '</pre>';
+            }
             die;
         }
 
@@ -328,7 +344,7 @@ class View
         $this->_viewPath = $this->_tplDir . $tplFile . '.html';
         unset($tplFile);
         extract($this->_data);
-        $template = C('OUTPUT_ENCODE') ? str_replace(array("\n","\t","    "), '', file_get_contents($this->_viewPath)) : file_get_contents($this->_viewPath);
+        $template = C('OUTPUT_ENCODE') ? str_replace(array("\n", "\t", "    "), '', file_get_contents($this->_viewPath)) : file_get_contents($this->_viewPath);
         eval('?>' . $template);
     }
 
@@ -344,7 +360,7 @@ class View
         unset($path);
         unset($data);
         extract(self::$tmpData['data']);
-        $template = C('OUTPUT_ENCODE') ? str_replace(array("\n","\t","    "), '', file_get_contents(self::$tmpData['path'])) : file_get_contents(self::$tmpData['path']);
+        $template = C('OUTPUT_ENCODE') ? str_replace(array("\n", "\t", "    "), '', file_get_contents(self::$tmpData['path'])) : file_get_contents(self::$tmpData['path']);
         eval('?>' . $template);
     }
 

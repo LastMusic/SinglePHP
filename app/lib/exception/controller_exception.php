@@ -3,7 +3,7 @@
  * Created by PhpStorm
  * @desc: 控制器异常类
  * @package: controller_exception.php
- * @author: leandre weibo.com/nly
+ * @author: leandre <nly92@foxmail.com>
  * @copyright: copyright(2014) leandre.cn
  * @version: 14/10/30
  */

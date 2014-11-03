@@ -3,7 +3,7 @@
  * Created by PhpStorm
  * @desc: 数据对象模型封装
  * @package: do_abstract.php
- * @author: leandre weibo.com/nly
+ * @author: leandre <nly92@foxmail.com>
  * @copyright: copyright(2014) leandre.cn
  * @version: 14/10/30
  */
@@ -30,6 +30,8 @@ abstract class Do_Abstract extends \ArrayObject
     const MODE_OUTPUT = 'output';
 
     protected $mode;
+
+    protected $argchecker_ns = 'Lib\Argchecker\\';
 
     public function __construct($init_data = NULL, $mode = self::MODE_INPUT)
     {
@@ -91,7 +93,7 @@ abstract class Do_Abstract extends \ArrayObject
     public function offsetSet($field_name, $value)
     {
         if (!isset($this->fields[$field_name])) {
-            throw new Do_Exception('field ' . $field_name . 'does not exists');
+            throw new Do_Exception('field ' . $field_name . ' does not exists');
         }
         $method = 'set_' . $field_name;
         if (method_exists($this, $method)) {
@@ -123,7 +125,7 @@ abstract class Do_Abstract extends \ArrayObject
                 if ($this->mode == self::MODE_OUTPUT) {
                     return null;
                 } else {
-                    throw new Do_Exception('fields ' . $field_name . 'does not set');
+                    throw new Do_Exception('fields ' . $field_name . ' does not set');
                 }
             }
             return parent::offsetExists($field_name) ? parent::offsetGet($field_name) : null;
@@ -131,14 +133,31 @@ abstract class Do_Abstract extends \ArrayObject
     }
 
     /**
-     * todo:规则校验
+     * 规则校验
      * @param $field_name
      * @param $value
      * @return mixed
      */
     public function apply_rule($field_name, $value)
     {
-        return $value;
+        $valid_value = $value;
+        if (is_array($this->fields[$field_name])) {
+            if ($this->mode === self::MODE_INPUT) {
+                $arg_args = $this->fields[$field_name];
+                $arg_type = $arg_args[0];
+                $arg_args['0'] = $value;
+                $valid_value = call_user_func_array(array($this->argchecker_ns . 'Argchecker', $arg_type), $arg_args);
+            }
+        } elseif ($this->fields[$field_name]) {
+            $class = $this->fields[$field_name];
+            if (!class_exists($class)) {
+                throw new Do_Exception('field ' . $field_name . ' class ' . $class . 'not exists');
+            }
+            if (!is_object($value) || get_class($value) !== $class) {
+                $valid_value = new $class($valid_value, $this->mode);
+            }
+        }
+        return $valid_value;
     }
 
     /**

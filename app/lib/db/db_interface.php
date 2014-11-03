@@ -3,7 +3,7 @@
  * Created by PhpStorm
  * @desc: 数据库接口类
  * @package: db_interface.php
- * @author: leandre weibo.com/nly
+ * @author: leandre <nly92@foxmail.com>
  * @copyright: copyright(2014) leandre.cn
  * @version: 14/10/29
  */

@@ -3,7 +3,7 @@
  * Created by PhpStorm
  * @desc: 数据写入异常类
  * @package: dw_exception.php
- * @author: leandre weibo.com/nly
+ * @author: leandre <nly92@foxmail.com>
  * @copyright: copyright(2014) leandre.cn
  * @version: 14/10/30
  */
