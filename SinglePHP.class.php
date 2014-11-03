@@ -22,8 +22,7 @@ date_default_timezone_set('Asia/Shanghai');
 function C($key, $value = null)
 {
     static $_config = array();
-    $args = func_num_args();
-    if ($args == 1) {
+    if ($value === null) {
         if (is_string($key)) { //如果传入的key是字符串
             return isset($_config[$key]) ? $_config[$key] : null;
         }
