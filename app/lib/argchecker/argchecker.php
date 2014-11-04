@@ -23,6 +23,15 @@ class Argchecker
 
     const ARGCHACKER_NS = 'Lib\Argchecker\\'; //校验器路径空间
 
+    /**
+     * 整数型校验
+     * @param $data
+     * @param $rule
+     * @param int $is_needed
+     * @param int $must_correct
+     * @param null $default
+     * @return mixed
+     */
     public static function int($data, $rule, $is_needed = 1, $must_correct = 1, $default = null)
     {
         return self::run_checker('int', $data, $rule, $is_needed, $must_correct, $default);
@@ -48,6 +57,17 @@ class Argchecker
 
     }
 
+    /**
+     * 校验器
+     * @param $argchecker_type
+     * @param $data
+     * @param $rule
+     * @param $is_needed
+     * @param $must_correct
+     * @param $default
+     * @return mixed
+     * @throws Do_Exception
+     */
     private static function run_checker($argchecker_type, $data, $rule, $is_needed, $must_correct, $default)
     {
         if (($ret_data = self::get_value($data, $is_needed, $default) !== true)) {
@@ -61,6 +81,14 @@ class Argchecker
         return self::get_return($data, $is_needed, $must_correct, $default);
     }
 
+    /**
+     * 获取值
+     * @param $data
+     * @param $is_needed
+     * @param $default
+     * @return bool|null
+     * @throws Do_Exception
+     */
     private static function get_value($data, $is_needed, $default)
     {
         if (!in_array($is_needed, array(self::NEED_NO_DEFAULT, self::NEED_USE_DEFAULT, self::NEED_MUST))) {
@@ -83,11 +111,18 @@ class Argchecker
         return true;
     }
 
+    /**
+     * 返回处理校验规则
+     * @param $argchecker_type
+     * @param $rule
+     * @return array
+     * @throws Do_Exception
+     */
     private static function check_rules($argchecker_type, $rule)
     {
         $rules = explode(';', $rule);
         if (class_exists($argchecker_type) && method_exists($argchecker_type, 'basic')) {
-            $check_rules = array(array('method' => 'basic'), 'param' => array());
+            $check_rules = array(array('method' => 'basic', 'param' => array()));
         } else {
             $check_rules = array();
         }
@@ -105,6 +140,16 @@ class Argchecker
         return $check_rules;
     }
 
+    /**
+     * 数据校验
+     * @param $argchecker_type
+     * @param $check_rules
+     * @param $data
+     * @param $must_correct
+     * @param $default
+     * @return null
+     * @throws Do_Exception
+     */
     private static function check($argchecker_type, $check_rules, $data, $must_correct, $default)
     {
         if (!in_array($must_correct, array(self::WRONG_NO_DEFAULT, self::WRONG_USE_DEFAULT, self::RIGHT))) {
@@ -128,6 +173,14 @@ class Argchecker
         return $data;
     }
 
+    /**
+     * 获取返回值
+     * @param $data
+     * @param $is_needed
+     * @param $must_correct
+     * @param $default
+     * @return mixed
+     */
     private static function get_return($data, $is_needed, $must_correct, $default)
     {
         if ($data === null && ($is_needed == self::NEED_USE_DEFAULT || $must_correct == self::WRONG_USE_DEFAULT)) {

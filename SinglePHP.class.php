@@ -85,8 +85,8 @@ function shutdown()
         if ($errorInfo !== null) {
             Log::fatal($errorInfo['message'] . ' in ' . $errorInfo['file'] . ' at ' . $errorInfo['line']);
             echo "<br /><br /><font color='red'>Exception Message：" . $errorInfo['message'] . '</font><br />';
-            echo 'Exception File：', $errorInfo['line'], '<br/>';
-            echo 'Exception Line：', $errorInfo['file'], '<br/>';
+            echo 'Exception Line：', $errorInfo['line'], '<br/>';
+            echo 'Exception File：', $errorInfo['file'], '<br/>';
         }
     }
 }
