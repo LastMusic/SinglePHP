@@ -39,7 +39,7 @@ class Argchecker
 
     public static function string($data, $rule, $is_needed = 1, $must_correct = 1, $default = null)
     {
-
+        return self::run_checker('string', $data, $rule, $is_needed, $must_correct, $default);
     }
 
     public static function float($data, $rule, $is_needed = 1, $must_correct = 1, $default = null)
@@ -166,7 +166,7 @@ class Argchecker
                     return $default;
                 }
                 if ($must_correct == self::NEED_MUST) {
-                    throw new Do_Exception($rule['method'] . ' is not correct');
+                    throw new Do_Exception($data . ' does not match ' . $rule['method']);
                 }
             }
         }

@@ -21,7 +21,12 @@ class User extends Do_Abstract
             Argchecker::RIGHT,
             '5'
         ),
-        'name' => '',
+        'name' => array(
+            'string',
+            'min,1;max,10',
+            Argchecker::NEED_MUST,
+            Argchecker::RIGHT,
+        ),
         'sex' => '',
         'age' => ''
     );
