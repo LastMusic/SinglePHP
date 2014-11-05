@@ -41,7 +41,7 @@ function C($key, $value = null)
         if (is_string($key)) {
             $_config[$key] = $value;
         } else {
-            halt('传入参数不正确', true);
+            throw new \Exception('params is not correct');
         }
     }
     return true;
@@ -57,25 +57,10 @@ function W($name, $data = array())
 {
     $fullName = '\Widget\\' . $name;
     if (!class_exists($fullName)) {
-        halt('Widget ' . $name . '不存在');
+        throw new \Exception('Widget ' . $name . ' not exists');
     }
     $widget = new $fullName();
     $widget->invoke($data);
-}
-
-/**
- * 终止程序运行
- * @param string $str 终止原因
- * @param bool $display 是否显示调用栈，默认显示
- * @return void
- */
-function halt($str, $display = true)
-{
-    Log::fatal($str);
-    if ($display) {
-        echo $str;
-    }
-    exit;
 }
 
 function shutdown()
@@ -155,7 +140,8 @@ class SinglePHP
             C('APP_FULL_PATH', realpath(getcwd() . DS . C('APP_PATH')));
             require(C('APP_FULL_PATH') . DS . 'common.php');
             spl_autoload_register(array('\Single\SinglePHP', 'autoload'));
-            $pathInfo = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '';
+            $uri = parse_url($_SERVER['REQUEST_URI']);
+            $pathInfo = $uri['path'];
             $pathInfoArr = array_filter(explode(DS, trim($pathInfo, DS)));
             $length = count($pathInfoArr);
             if ($length == 0) {
@@ -167,11 +153,11 @@ class SinglePHP
             $namespace = '\Controller\\' . $dirStr;
             $controllerClass = $namespace . $this->c;
             if (!class_exists($controllerClass)) {
-                halt('Controller ' . $controllerClass . ' does not exist');
+                throw new \Exception('Controller ' . $controllerClass . ' does not exist');
             }
             $controller = new $controllerClass();
             if (!method_exists($controller, '_run')) {
-                halt('Controller ' . $controllerClass . ' does not has _run() method');
+                throw new \Exception('Controller ' . $controllerClass . ' does not has _run() method');
             }
             $begin = microtime(TRUE);
             call_user_func(array($controller, '_run')); // main
@@ -186,6 +172,7 @@ class SinglePHP
                 echo 'Exception Line：', $e->getLine(), '<br/>';
                 echo '<pre>Exception Code：<br/>' . $e->getTraceAsString() . '</pre>';
             }
+            Log::fatal($e->getMessage());
             die;
         }
 
@@ -198,7 +185,9 @@ class SinglePHP
     public static function autoload($class)
     {
         $classFile = strtolower(str_replace('\\', DS, $class));
-        include(C('APP_FULL_PATH') . DS . $classFile . '.php');
+        $file = C('APP_FULL_PATH') . DS . $classFile . '.php';
+        require($file);
+
     }
 
 }
